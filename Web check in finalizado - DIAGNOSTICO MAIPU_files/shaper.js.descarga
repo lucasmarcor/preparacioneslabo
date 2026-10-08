@@ -1,5 +1,0 @@
-$(function () {
-    // Initialize shaper JS engines.
-	new EntityDraftEngine();
-	new EntityAlias();
-});
