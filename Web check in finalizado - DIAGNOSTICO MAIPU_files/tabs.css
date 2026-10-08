@@ -1,0 +1,40 @@
+.nav-tabs {
+    border-bottom: 0;
+}
+
+    .nav-tabs .nav-link span {
+        font: 500 14px/16.1px 'Dasa Sans';
+        color: #666666;
+    }
+
+    .nav-tabs .nav-link.active {
+        border-color: transparent;
+        border-bottom: 2px solid #0037FF;
+    }
+
+    .nav-tabs .nav-link:focus {
+        background-color: #fff;
+        border-color: transparent;
+        border: 2px solid #161616;
+    }
+
+    .nav-tabs .nav-link.active span {
+        color: #0037FF !important;
+    }
+
+    .nav-tabs .nav-link.disabled {
+        color: #666666;
+        background-color: #1616160A;
+        border-color: transparent;
+    }
+
+.tab-file-list {
+    margin-bottom: 0px !important;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.tab-file {
+    border-bottom: 0px !important;
+    border-radius: 0px !important;
+    margin-bottom: -2px !important;
+}

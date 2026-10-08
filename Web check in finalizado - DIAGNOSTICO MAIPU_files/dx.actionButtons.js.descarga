@@ -1,0 +1,173 @@
+class DxActionButtons {
+  
+    constructor() {}
+
+    onActionButtonClick = (e) => {
+        const selectedButton = this.getSelectedButton(e)
+
+        switch(selectedButton.typeOfButton) {
+        case "redirect": {
+            this.handleRedirect(e, selectedButton)
+            break
+        }
+        case "decision": {
+            this.handleDecision(e, selectedButton)
+            break
+        }
+        case "action": {
+            this.handleAction(e, selectedButton)
+            break
+        }
+        case "jsFunction": {
+            this.handleJsFunction(e, selectedButton);
+        }
+        }
+    }
+
+    getSelectedButton = (e) => {
+        const availableButtons = e.column.buttons
+        const targetButton = e.event.target
+        const selectedButton = { ...availableButtons.filter(b => targetButton.className.includes(b.name))[0]}
+        return selectedButton
+    }
+
+    handleRedirect = (e, button) => {
+        this.replaceTokens(e, button)
+        window.open(button.url, button.target)
+    }
+
+    handleDecision = (e, button) => {
+        const self = this
+        this.replaceTokens(e, button)
+
+        const ajaxData = this.getAntiforgeryToken(button)
+
+        swal({
+        text: button.modalMessage,
+        type: button.modalTypeOfAlert,
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: button.modalConfirmLabel,
+        cancelButtonText: button.modalCancelLabel
+        }).then(function (selection) {
+        if (selection.value) {
+            $.ajax({
+            dataType: 'json',
+            type: button.type,
+            url: button.url,
+            data: ajaxData,
+            success: function (result) {
+                swal(button.successTitle, result.message, "success").then(function () {
+                    self.reloadComponent(e)
+                })
+            },
+            error: function (error) {
+                swal({
+                type: 'warning',
+                text: error.responseJSON.message,
+                confirmButtonColor: '#28a745'
+                })
+            }
+            })
+        }
+        })
+    }
+
+    handleAction = (e, button) => {
+        const self = this
+        this.replaceTokens(e, button)
+
+        const ajaxData = this.getAntiforgeryToken(button)
+
+        $.ajax({
+        dataType: 'json',
+        type: button.type,
+        url: button.url,
+        data: ajaxData,
+        success: function (result) {
+            swal(button.successTitle, result.message, "success").then(function () {
+            self.reloadComponent(e)
+            })
+        },
+        error: function (error) {
+            swal({
+            type: 'warning',
+            text: error.responseJSON.message,
+            confirmButtonColor: '#28a745'
+            })
+        }
+        })
+    }
+
+    handleJsFunction = (e, button) => {
+        this.replaceTokens(e, button)
+
+        // Call function by name.
+        window[button.jsFunction](e, button);
+    };
+
+    reloadComponent = (e) => {
+        const componentId = e.element[0].id;
+        const componentName = e.component.NAME;
+
+        switch (componentName) {
+            case "dxTreeList": {
+                const treeList = $(`#${componentId}`).dxTreeList("instance");
+                treeList.refresh()
+            }
+            default: {
+                const dataGrid = $(`#${componentId}`).dxDataGrid("instance");
+                dataGrid.refresh()
+            }
+        }
+    };
+
+    getAntiforgeryToken = (button) => {
+        let ajaxData = null
+        if (button.type.toLowerCase() == "post")
+            ajaxData = {
+                "__RequestVerificationToken": $('[name="__RequestVerificationToken"]').val()
+            }
+        return ajaxData
+    }
+
+    replaceTokens = (e, button) => {
+        const row = e.row.data
+            const expressionsToReplace = this.getExpressionsToReplace(button)
+            for(const expression of expressionsToReplace) {
+                button[expression.property] = button[expression.property].replace(`\{${expression.token}\}`, row[expression.token])
+            }
+    }
+
+    getExpressionsToReplace = (button) => {
+    let expressionsToReplace = []
+    let match
+    var regex = /\{(.*?)\}/g
+    for(const key in button) {
+        do {
+            match = regex.exec(button[key])
+            if(match)
+                expressionsToReplace.push({
+                    property: key,
+                    token: match[1]
+                })
+        } while (match)
+    }
+    
+        return expressionsToReplace
+    }
+}
+
+// JS Functions available through jsFunction action type.
+function dxActionButton_openGallery (e, button) {
+
+    const $element = $(e.event.target);
+    $element.data('url', button.url);
+    $element.data('enableZoom', button.enableZoom);
+    $element.data('enableThumbnail', button.enableThumbnail);
+    $element.data('enableFullScreen', button.enableFullScreen);
+    $element.data('enableAutoplay', button.enableAutoplay);
+
+    const gallery = new LightGallery($element);
+    gallery.open();
+}

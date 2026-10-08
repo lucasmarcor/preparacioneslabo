@@ -1,0 +1,134 @@
+class DxCellTemplates {
+
+    constructor() { }
+
+    // This method will be called for each cell on a dev extreme table.
+    onCellPrepared = (options) => {
+        if (options.value && (options.rowType == "data" || options.rowType == "detailAdaptive")) {
+            const cellType = this.getCellType(options)
+
+            switch (cellType) {
+                case "colorCell": {
+                    this.renderColorCell(options)
+                    break
+                }
+                case "multivalueCell": {
+                    this.renderMultivalueCell(options)
+                    break
+                }
+            }
+        }
+
+        if (options.rowType == 'filter' && options.column.type == 'selection') {
+            this.renderSelectMultiRowFilter(options)
+        }
+    }
+
+    // Analize the cell structure to determine which type of cell is being used
+    getCellType = (options) => {
+        // Check if is an object or raw text/numbers/dates
+        if (options.value.constructor.name === "Object") {
+            if (options.value.type === 'DataTableColorColumn') {
+                return "colorCell"
+            }
+
+            if (options.value.limit != undefined) {
+                return "multivalueCell"
+            }
+        }
+
+        return "default"
+    }
+
+    // --------------------------------------------------------------------
+    // CELL TEMPLATES
+    // --------------------------------------------------------------------
+
+    // Generates the required html markup for a color cell in dx data grids
+    renderColorCell = (options) => {
+        const cell = options.value
+        let cellHtml = ""
+        if (cell.data != null) {
+            cellHtml = `<div class="datatable-color-column" title="${cell.alt || ''}" style="background-color:${cell.data}"></div>`
+        } else {
+            cellHtml = `<div class="datatable-color-column"></div>`
+        }
+        options.cellElement.html(cellHtml)
+    }
+
+    // Generates the required html markup for a multi value cell in dx data grids
+    renderMultivalueCell = (options) => {
+        const cell = options.value
+        if (cell.data.length == 0) {
+            options.cellElement.html('')
+            return
+        }
+
+        let limit = cell.limit > 0 && cell.data.length > cell.limit ? cell.limit : cell.data.length
+
+        let output = '<div class="list d-flex">'
+        for (let i = 0; i < limit; i++) {
+            const specificTagStyle = cell.stylePerValue ? cell.stylePerValue.find(s => s.value == cell.data[i]) : null
+            if (specificTagStyle) {
+                output += `<p class='list-item ${getTagStyle(specificTagStyle.style)}'>${cell.data[i]}</p>`
+            } else {
+                output += `<p class='list-item ${getTagStyle(cell.defaultStyle)}'>${cell.data[i]}</p>`
+            }
+        }
+        if (cell.limit > 0 && cell.data.length > cell.limit) {
+            output += `<p class='list-item ${cell.style} additional'><i class='fa fa-plus'></i> ${cell.data.length - cell.limit}</p>`
+        }
+
+        options.cellElement.html(`${output}</div>`)
+    }
+
+    // Generates the required html markup for a select multiple rows filter cell in dx data grids
+    renderSelectMultiRowFilter = (options) => {
+        var grid = options.component;
+        var myEditor = $('<div />').dxSelectBox({
+            dataSource: [
+                dataGridLocalization['WebAppFront.Js.DataGridRowSelectionFilter.AllLabel'],
+                dataGridLocalization['WebAppFront.Js.DataGridRowSelectionFilter.SelectedLabel'],
+                dataGridLocalization['WebAppFront.Js.DataGridRowSelectionFilter.UnselectedLabel']
+            ],
+            value: dataGridLocalization['WebAppFront.Js.DataGridRowSelectionFilter.AllLabel'],
+            onValueChanged: function (args) {
+                if (args.value == dataGridLocalization['WebAppFront.Js.DataGridRowSelectionFilter.AllLabel']) {
+                    grid.clearFilter('dataSource');
+                } else {
+                    var keys = grid.getSelectedRowKeys();
+                    var filter = [];
+                    if (keys.length > 0) {
+                        keys.forEach(function (key) {
+                            filter.push(['id', key]);
+                            filter.push('or');
+                        });
+                        filter.pop();
+                        if (args.value == dataGridLocalization['WebAppFront.Js.DataGridRowSelectionFilter.UnselectedLabel']) {
+                            filter = ['!', filter];
+                        }
+                    } else {
+                        var items = grid.getDataSource().items()
+                        for (var i = 0; i < items.length; i++) {
+                            keys.push(items[i].id);
+                        }
+
+                        keys.forEach(function (key) {
+                            filter.push(['id', key]);
+                            filter.push('or');
+                        });
+                        filter.pop();
+
+                        if (args.value == dataGridLocalization['WebAppFront.Js.DataGridRowSelectionFilter.SelectedLabel']) {
+                            filter = ['!', filter];
+                        }
+                    }
+                    grid.filter(filter);
+                }
+            },
+            dropDownOptions: { width: 200 }
+        });
+        options.cellElement.html(myEditor);
+        options.cellElement.addClass('dx-editor-cell');
+    }
+}

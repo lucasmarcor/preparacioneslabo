@@ -1,0 +1,78 @@
+﻿class EntityDraftEngine {
+
+    constructor() {
+        const $btnSaveDraft = $("#btn-save-draft");
+        if ($btnSaveDraft.length) {
+            this.setClassVariables($btnSaveDraft);
+            this.setListeners($btnSaveDraft);
+        }
+    }
+
+    setClassVariables($btnSaveDraft) {
+        this.entityType = $btnSaveDraft.attr("entity-type");
+        this.interface = $btnSaveDraft.attr("interface");
+        this.$draftId = $("#DraftId");
+        this.antiforgeryToken = $('[name="__RequestVerificationToken"]').val();
+    }
+
+    setListeners($btnSaveDraft) {
+        $btnSaveDraft.on("click", () => this.saveDraft());
+        $(window).off('beforeunload').on('beforeunload', unloadEvent => this.onDrafteableEntityBeforeUnload(unloadEvent));
+    }
+
+    saveDraft(callback = undefined) {
+        return $.ajax({
+            url: `/Draft/Save`,
+            type: 'POST',
+            data: new DraftReqDTO(this.entityType, this.interface, this.$draftId.val(), this.antiforgeryToken),
+            success: draftResDTO => this.onSaveSuccess(draftResDTO, callback),
+            error: () => this.onSaveError(callback)
+        });
+    }
+
+    onSaveSuccess(draftResDTO, callback) {
+        swal({
+            position: 'top-end',
+            type: "success",
+            text: entityDraftResources["Ignite.Framework.WebTools.Js.EntityDraft.OnSaveSuccessText"],
+            showConfirmButton: false,
+            timer: 1000
+        });
+        this.$draftId.val(draftResDTO.draftId);
+        callback && callback();
+    }
+
+    onSaveError(callback) {
+        swal({
+            position: 'top-end',
+            type: "warning",
+            text: entityDraftResources["Ignite.Framework.WebTools.Js.EntityDraft.OnSaveErrorText"],
+            showConfirmButton: false,
+            timer: 1000
+        });
+        callback && callback();
+    }
+
+    onDrafteableEntityBeforeUnload(unloadEvent) {
+        queueMicrotask(() => this.showSaveDraftConfirmationDialog());
+
+        return onBeforeUnload(unloadEvent);
+    }
+
+    showSaveDraftConfirmationDialog() {
+        if (anyFormChanged(formsInitialData) && confirm(entityDraftResources["Ignite.Framework.WebTools.Js.EntityDraft.SaveDraftBeforeLeaveQuestion"])) {
+            this.saveDraft(setFormInitialData);
+        }
+    }
+}
+
+class DraftReqDTO {
+
+    constructor(entityType, _interface, draftId, antiforgeryToken) {
+        this.entityType = entityType;
+        this.interface = _interface;
+        this.data = JSON.stringify(getCurrentViewModel());
+        this.draftId = draftId;
+        this.__RequestVerificationToken = antiforgeryToken; 
+    }
+}

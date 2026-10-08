@@ -1,0 +1,332 @@
+﻿@import url("variables.css");
+
+.card-dependents {
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(22, 22, 22, 0.08);
+    color: #161616;
+    margin-bottom: var(--spacing-stack-xxs);
+}
+
+    .card-dependents .card-dependents-title {
+        font: 600 16px/24px 'Dasa Sans';
+        color: #000;
+        position: relative;
+    }
+
+    .card-dependents .card-dependents-body {
+        font: 400 14px/23.8px 'Dasa Sans';
+        margin-bottom: 4px;
+    }
+
+    .card-dependents .card-dependents-caption {
+        font: 400 12px/15.96px 'Dasa Sans';
+    }
+
+.card-dependents-caption ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+    .card-dependents-caption ul li {
+        list-style-type: none;
+        margin-bottom: 2px;
+    }
+
+        .card-dependents-caption ul li:last-child {
+            margin-bottom: 0px;
+        }
+
+.card-dependents-row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.card-dependents-col-1 {
+    -ms-flex: 0 0 83.333333%;
+    flex: 0 0 83.333333%;
+    max-width: 83.333333%;
+}
+
+.card-dependents-col-2 {
+    -ms-flex: 0 0 16.666667%;
+    flex: 0 0 16.666667%;
+    max-width: 16.666667%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+
+    .card-dependents-col-2 i {
+        display: block;
+    }
+
+.card-dependents-row:hover {
+    background-color: var( --interaction-blend-01);
+}
+
+    .card-dependents-row:hover > .card-dependents-col-2 i {
+        color: var(--interaction-select-active);
+    }
+
+.card-dependents-row:has(.card-dependents-col-2 i:active) {
+    background-color: var(--interaction-subtle-02);
+}
+
+.card-dependents-row .card-dependents-col-2 i:active {
+    color: var(--neutral-01);
+}
+
+@media (min-width: 1024px) {
+    .card-list-no-dev-ex {
+        align-items: flex-start;
+    }
+
+    .text-center {
+        text-align: start !important;
+        padding-left: 16px;
+    }
+
+    .title-xl {
+        text-align: start !important;
+        padding-left: 16px;
+    }
+}
+
+/* Card-list-modules*/
+.card-list-module {
+    padding: 16px;
+    background: rgba(22, 22, 22, 0.04);
+    width: 280px;
+    height: 112px;
+    color: #000;
+}
+
+.card-dependents-space-between li {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+    .card-dependents-space-between li input {
+        max-width: 120px;
+        font-weight: bold;
+        border: hidden;
+        text-align: right;
+        background-color: #fff;
+        font-size: 15px;
+    }
+
+.card-list-module .card-list-module-body .card-list-module-top {
+    display: flex;
+    align-items: center;
+}
+
+    .card-list-module .card-list-module-body .card-list-module-top .card-list-module-img {
+        margin-left: 3px;
+    }
+
+    .card-list-module .card-list-module-body .card-list-module-top .card-list-module-title {
+        font: 500 16px/24px 'Dasa Sans';
+        padding: 0;
+        margin-left: 11px;
+        margin-bottom: 0;
+        color: #161616;
+    }
+
+    .card-list-module .card-list-module-body .card-list-module-top span {
+        font: 400 14px/23.28px 'Dasa Sans';
+        margin-left: auto;
+        color: #363636;
+    }
+
+.card-list-module .card-list-module-body .card-list-module-text {
+    font: 400 14px/23.28px 'Dasa Sans';
+    padding-left: 32px;
+    margin-bottom: 0;
+    color: #363636;
+}
+
+@media (min-width: 768px) {
+    .card-list-module {
+        width: 360px !important;
+    }
+}
+/*--Generic Card--*/
+
+.generic-card {
+    background: #FEFEFE;
+    border-radius: 8px;
+    border: 1px solid rgba(22, 22, 22, 0.08);
+    margin: 8px;
+    display: flex;
+}
+
+    .generic-card ul li {
+        list-style-type: none;
+    }
+
+    .generic-card ul {
+        padding: 0px;
+    }
+
+.col-captions {
+    padding: 0px;
+    margin: 16px;
+    flex: 1;
+}
+
+.col-icons {
+    padding: 0px;
+    margin: 16px;
+    display: flex;
+}
+
+    .col-icons img {
+        width: 18px;
+        height: 18px;
+        margin: 15px;
+    }
+
+    .col-icons .img-container {
+        width: 48px;
+        height: 48px;
+        margin: 4px;
+    }
+
+b, strong {
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .generic-card {
+        flex-direction: column;
+    }
+
+    .col-icons {
+        justify-content: end;
+        margin-top: 0px;
+    }
+}
+
+/*--End Generic Card--*/
+
+/* Styles for new cards to avoid issues with previous cards */
+.maipu-row * {
+    margin: 0 !important;
+}
+
+.maipu-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.maipu-row-icon {
+    display: flex;
+    align-items: center;
+    padding: 16px !important;
+    background-color: var(--interaction-card-01);
+}
+
+.maipu-row .maipu-row-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 16px;
+    background-color: var(--interaction-card-02);
+}
+
+.maipu-row .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    background-color: var(--interaction-card-02);
+}
+
+.maipu-row:hover {
+    background-color: var(--interaction-card-focus-background);
+    color: var(--interaction-card-focus);
+}
+
+    .maipu-row:hover .action-buttons,
+    .maipu-row:hover .maipu-row-icon {
+        background-color: var(--interaction-card-focus-background);
+        color: var(--interaction-card-focus);
+    }
+
+    .maipu-row:hover .maipu-row-content {
+        background-color: var(--interaction-card-content-focus-background);
+    }
+
+    .maipu-row:hover .maipu-row-icon svg {
+        color: var(--interaction-card-focus);
+    }
+
+    .maipu-row:hover .result-icon {
+        filter: var(--svg-hover-filter);
+    }
+
+@media (max-width: 768px) {
+    .maipu-row {
+        flex-direction: row; /* Asegura disposición horizontal */
+        flex-wrap: nowrap;
+    }
+
+    .maipu-row-icon {
+        flex: 0 0 48px; /* Tamaño fijo para el ícono */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 8px;
+    }
+
+    .maipu-row .maipu-row-content {
+        flex: 1 1 auto; /* Ocupa el espacio restante */
+        padding: 8px;
+        overflow: hidden;
+    }
+
+    .maipu-row .action-buttons {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .action-button img,
+    .action-button i {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .bootstrap-datetimepicker-widget.dropdown-menu {
+        position: fixed !important; /* Usamos fixed para sacar el widget del flujo del contenedor */
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        margin: 0;
+    }
+
+    .bootstrap-datetimepicker-widget.pull-right {
+        right: auto !important;
+    }
+
+    .bootstrap-datetimepicker-widget.bottom {
+        top: 50% !important; /* ya está cubierto por el top anterior */
+    }
+}

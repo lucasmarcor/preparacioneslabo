@@ -1,0 +1,57 @@
+@import url("variables.css");
+
+/* ##SEARCHBOX## */
+.searchbox {
+    border: var(--interaction-blend-04) thin solid;
+    padding-left: var(--spacing-stack-xxxs);
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-right: 12px;
+    border-radius: var(--spacing-stack-nano);
+    display: flex;
+    align-items: center;
+}
+
+    .searchbox svg {
+        margin-right: var(--spacing-stack-xxxs);
+    }
+
+    .searchbox:focus-within svg path {
+        fill: var(--interaction-select-active);
+    }
+
+    .searchbox:focus-within {
+        box-shadow: var(--inner-shadow-active);
+    }
+
+    .searchbox input {
+        background: transparent;
+        border: none;
+        padding: 0px;
+        min-height: 0px;
+        height: auto;
+        border-radius: 0;
+    }
+
+    .searchbox.disabled {
+        background-color: var(--interaction-blend-01) !important;
+        box-shadow: var(--inner-shadow-disabled) !important;
+    }
+
+    /* ##INPUT## */
+    .searchbox input:focus {
+        background-color: transparent;
+    }
+
+    .searchbox.disabled > input {
+        background-color: transparent
+    }
+
+    /* ##ICONS## */
+    .searchbox > svg path {
+        fill: var(--interaction-select-focus);
+    }
+
+    .searchbox.disabled > svg path {
+        fill: var(--interaction-blend-04);
+    }

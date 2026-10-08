@@ -1,0 +1,16 @@
+﻿const cookieConsentModalSelector = "#cookieConsentModal";
+
+const cookiePolicyChangeRequest = new UserClaimChangeRequest({
+    endpoint: `/Account/AcceptCookiePolicy`,
+    getTokenFunction: () => $(cookieConsentModalSelector).children('[name="__RequestVerificationToken"]').val(),
+    successCallback: function (res) {
+        document.cookie = res.cookie;
+        $(cookieConsentModalSelector).modal('hide');
+    }
+});
+
+new AutopromptedMandatoryModal({
+    modalSelector: cookieConsentModalSelector,
+    acceptButtonSelector: "#btn-accept-cookie-policy",
+    acceptButtonCallback: cookiePolicyChangeRequest.asCallback()
+});

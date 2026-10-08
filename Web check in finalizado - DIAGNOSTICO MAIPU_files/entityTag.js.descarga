@@ -1,0 +1,30 @@
+$('#Tags').change(function () {
+    //The value is before the change
+    var selections = $(this).val();
+    //If an option is selected or last option left was just unselected
+    if ((selections != "" && selections != null) || (selections == "" && $('#Tags option').length <= 1)) {
+        var formId = $(this).closest("form").attr("id");
+        var entityType = formId.substr(0, formId.indexOf('-'));
+        $.ajax({
+            type: "POST",
+            url: `/Taxonomy/GetAvailableTerms`,
+            data: {
+                entityType: entityType,
+                selectedTerms: selections
+            },
+            dataType: "json",
+            traditional: true
+        }).done(function (availableTerms) {
+            if (availableTerms.length > 0) {
+                $('#Tags').empty();
+                for (var i = 0; i < availableTerms.length; i++) {
+                    var newOption = new Option(availableTerms[i].text, availableTerms[i].value, false, availableTerms[i].selected);
+                    $('#Tags').append(newOption);
+                }
+            }
+            else {
+                $('#Tags').val(null).trigger('change');
+            }
+        });
+    }
+});

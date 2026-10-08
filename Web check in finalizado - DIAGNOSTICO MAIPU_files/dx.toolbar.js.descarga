@@ -1,0 +1,45 @@
+class DxToolbar {
+
+    constructor(options)
+    {
+        this.buttonLabel = options.buttonLabel;
+        this.clearFilterPanel = options.clearFilterPanel;
+    }
+
+    toolbarPreparing = (e) => {
+        var self = this;
+        e.toolbarOptions.items.unshift(
+        {
+            location: "after",
+            widget: "dxButton",
+            options: {
+                icon: "clearformat",
+                hint: self.buttonLabel,
+                onClick: function () {
+                    const tableName = e.element[0].id
+                    const dataGrid = $(`#${tableName}`).dxDataGrid('instance')
+                    const pager = dataGrid.option('pager')
+
+                    // get current state to preserve filters
+                    const currentState = dataGrid.state()
+                    const defaultPageIndex = self.infiniteScroll ? currentState.pageIndex : 0
+                    const defaultPageSize = self.infiniteScroll ? currentState.pageSize : Math.min.apply(null, pager.allowedPageSizes)
+
+                    let newState = {
+                        "pageIndex": defaultPageIndex,
+                        "pageSize": defaultPageSize,
+                        "allowedPageSizes": currentState.allowedPageSizes
+                    }
+
+                    if (!self.clearFilterPanel) {
+                        newState.filterPanel = currentState.filterPanel;
+                        newState.filterValue = currentState.filterValue;
+                    }
+
+                    // update grid state
+                    dataGrid.state(newState);
+                }
+            }
+        });
+    }
+}

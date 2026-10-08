@@ -1,0 +1,84 @@
+﻿@import url("variables.css");
+
+.dropdown-toggle::after {
+    border: 0;
+}
+
+.content-menu .nav-link {
+    position: absolute;
+    left: 20px;
+    top: -15px;
+}
+
+.dropdown-btn-close {
+    display: none;
+    z-index: 999;
+    float: right
+}
+
+.btn-log-out, .btn-log-in {
+    font-family: Dasa Sans;
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--interaction-select-active) !important;
+}
+
+    .btn-log-out svg path {
+        fill: var(--interaction-select-active);
+        margin-bottom: 3px;
+    }
+
+    .btn-log-out .fas.fa-sign-out-alt {
+        font-size: 16px;
+    }
+
+        .btn-log-out .fas.fa-sign-out-alt:before {
+            content: "\f2f5";
+        }
+
+.logIn-icon {
+    font-size: 16px;
+}
+
+@media (max-width: 1023px) {
+    .content-menu {
+        position: static;
+        display: flex !important;
+    }
+
+        .content-menu .nav-link {
+            position: relative;
+            left: 0;
+            top: 0;
+            z-index: 999;
+        }
+
+        .content-menu.show .navbar.top-navbar {
+            position: absolute;
+            padding: 16px;
+            z-index: 998;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border: 0;
+            height: 100%;
+            background-color: #ffff;
+            box-shadow: 24px 0px 24px 0px rgba(0, 0, 0, 0.1)
+        }
+
+        .content-menu .navbar-nav, .content-menu .navbar-nav .nav-item {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+        }
+
+        .content-menu .dropdown-btn-open.hideBtn {
+            opacity: 0;
+        }
+
+    .dropdown-btn-close.showBtn {
+        display: block
+    }
+}

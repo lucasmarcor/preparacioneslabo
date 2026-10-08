@@ -1,0 +1,10 @@
+﻿class AutopromptedMandatoryModal {
+
+    constructor(configuration) {
+        $(configuration.acceptButtonSelector).click(configuration.acceptButtonCallback);
+        $(function () {
+            $(configuration.modalSelector).modal('show');
+        });
+    }
+
+}

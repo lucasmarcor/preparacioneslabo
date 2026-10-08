@@ -1,0 +1,23 @@
+$(() => {
+    const swiper = new Swiper(".swiper", {
+        direction: "horizontal",
+        loop: false,
+        slidesPerView: 'auto',
+        // If we need pagination
+
+        // Navigation arrows
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        // If we need pagination
+        pagination: {
+            el: ".swiper-pagination",
+        },
+        spaceBetween: 30,
+        // And if we need scrollbar
+        scrollbar: {
+            el: ".swiper-scrollbar",
+        },
+    });
+});

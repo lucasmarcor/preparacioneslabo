@@ -1,0 +1,373 @@
+@import url("variables.css");
+
+.sidebar {
+    display: none;
+}
+
+@media(max-height: 650px) {
+    .sidebar .logo {
+        padding-top: 0px !important;
+    }
+
+    .sidebar .username,
+    .sidebar-options .username {
+        margin-top: 30px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .sidebar-options ul {
+        margin-top: 8px !important;
+        gap: 8px !important;
+    }
+}
+
+.sidebar .username,
+.sidebar-options .username {
+    color: #0B173A;
+    margin-top: 48px;
+    margin-bottom: 28px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.sidebar-options .title,
+.sidebar-options .title a {
+    color: var(--gray);
+    margin-top: 30px;
+    font-size: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.sidebar-options ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    list-style: none;
+    margin-top: 12px;
+    padding-left: 0;
+}
+
+.sidebar-options .sidebar-option ul li:focus-within a {
+    box-shadow: var(--primary) 0px 0px 0px 2px;
+    color: var(--primary);
+}
+
+.sidebar-logout a {
+    padding: 4px;
+}
+
+.sidebar-options .sidebar-option ul li:focus-within svg path {
+    fill: var(--primary);
+}
+
+.sidebar-options .sidebar-option ul li.active:focus-within a {
+    box-shadow: var(--primary) 0px 0px 0px 2px;
+}
+
+.sidebar-options ul li:focus-within span {
+    text-decoration: none;
+}
+
+.sidebar-options ul li a {
+    text-decoration: none;
+    padding: 4px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    color: var(--gray);
+}
+
+.sidebar-options svg {
+    width: 18px;
+    height: 20px;
+}
+
+/* Estados activos y focus */
+.sidebar-options .sidebar-option ul li.sidebar-option.active a,
+.sidebar-options > ul > li.sidebar-option:focus-within > a {
+    color: var(--primary);
+}
+
+.sidebar-options ul li.sidebar-option.active a span,
+.sidebar-options > ul > li.sidebar-option:focus-within > span {
+    text-decoration: none;
+}
+
+.sidebar-options > ul > li.sidebar-option.active:focus-within > a {
+    box-shadow: var(--primary) 0px 0px 0px 2px;
+}
+
+/* Navbar mobile */
+#navbar {
+    display: none;
+}
+
+    #navbar .sidebar-logout {
+        position: absolute;
+        bottom: 16px;
+    }
+
+@media (min-width: 1024px) {
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        width: 320px;
+        height: 100vh;
+        background-color: var(--neutral-00);
+        padding: 20px 28px;
+        border-right: 1px solid rgba(22, 22, 22, 0.12);
+        z-index: 1;
+        box-shadow: 12px 0 24px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        position: fixed
+    }
+
+        .sidebar .logo {
+            padding-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+    .sidebar-options {
+        margin: 0px !important;
+    }
+}
+
+@media (max-width: 1023px) {
+    #navbar {
+        display: block;
+    }
+
+    #navbar-top {
+        display: flex;
+        align-items: center;
+        height: 56px;
+        flex-direction: row;
+        gap: 4px;
+    }
+}
+
+.dropdown-menu-front {
+    transform: none !important;
+    bottom: 0 !important;
+}
+
+#navbar .navbar-buttons-wrapper li a span {
+    width: 100%;
+}
+
+.sidebar-options ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 12px;
+    list-style: none;
+    padding-left: 0;
+}
+
+    .sidebar-options ul li.sidebar-option:focus-within a {
+        box-shadow: var(--primary) 0px 0px 0px 0px;
+        color: var(--primary);
+    }
+
+.sidebar-logout a {
+    padding: 4px;
+}
+
+.sidebar-options ul li.sidebar-option:focus-within svg path {
+    fill: var(--primary);
+}
+
+.sidebar-options ul li.sidebar-option.active:focus-within a {
+    box-shadow: var(--primary) 0px 0px 0px 2px;
+}
+
+.sidebar-options ul li.sidebar-option:focus-within span {
+    text-decoration: none;
+}
+
+.sidebar-options ul li a {
+    text-decoration: none;
+    padding: 4px;
+    display: flex;
+    gap: 6px;
+    color: var(--gray);
+}
+
+.sidebar-options ul li svg path {
+    fill: var(--gray);
+}
+
+.sidebar-options ul li.sidebar-option.active a {
+    color: var(--primary);
+}
+
+.sidebar-options ul li.sidebar-option.active svg path {
+    fill: var(--primary);
+}
+
+.sidebar-options ul li.sidebar-option.active a span {
+    text-decoration: none;
+}
+
+.sidebar .sidebar-logout {
+    display: flex;
+    flex: 1;
+    align-items: end;
+}
+
+    .sidebar .sidebar-logout a {
+        display: flex;
+        gap: 6px;
+        color: var(--gray);
+    }
+
+.sidebar .exit-icon path {
+    fill: var(--gray);
+}
+
+.sidebar-options .sidebar-logout ul li.sidebar-option:focus-within a {
+    box-shadow: var(--primary) 0px 0px 0px 2px;
+    color: var(--primary);
+}
+
+.sidebar-options .sidebar-logout ul li.sidebar-option:focus-within svg path {
+    fill: var(--primary);
+}
+
+.sidebar-options ul li.sidebar-option:focus-within a {
+    box-shadow: var(--primary) 0px 0px 0px 0px;
+    color: var(--primary);
+}
+
+.sidebar-logout a {
+    padding: 4px;
+}
+
+.sidebar-option {
+    padding-left: 32px;
+}
+
+    .sidebar-option.active {
+        position: relative;
+    }
+
+        .sidebar-option.active::before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 0;
+            height: 100%;
+            width: 6px;
+            background-color: var(--primary);
+            border-radius: 0 4px 4px 0;
+        }
+
+    .sidebar-option.collapsable-option.active::before {
+        left: -64px;
+    }
+
+.sidebar-options ul li.sidebar-option:focus-within svg path {
+    fill: var(--primary);
+}
+
+.sidebar-options ul li.sidebar-option.active:focus-within a {
+    box-shadow: var(--primary) 0px 0px 0px 2px;
+}
+
+.sidebar-options ul li.sidebar-option:focus-within span {
+    text-decoration: none;
+}
+
+.sidebar-options ul li a {
+    text-decoration: none;
+    padding: 4px;
+    display: flex;
+    gap: 6px;
+    color: var(--gray);
+}
+
+.sidebar-options ul li svg path {
+    color: var(--gray);
+}
+
+.sidebar-options ul li.sidebar-option.active a {
+    color: var(--primary);
+}
+
+.sidebar-options ul li.sidebar-option.active svg path {
+    fill: var(--primary);
+}
+
+.sidebar-options ul li.sidebar-option.active a span {
+    text-decoration: none;
+}
+
+.sidebar-options .logo {
+    margin: 32px 0;
+}
+
+.dropdown-menu-front {
+    transform: none !important;
+    bottom: 0 !important;
+}
+
+.web-heading-sm,
+.web-heading-md,
+.web-heading-lg,
+.web-heading-xl {
+    color: var(--color-typeface-inverse-on-brand);
+}
+
+a[href="#collapseOptions"] .web-interaction-md {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+a[href="#collapseOptions"][aria-expanded="false"] .web-interaction-md::after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f107"; /* fa-chevron-down */
+}
+
+/* Flecha cuando está expandido (chevron-up) */
+a[href="#collapseOptions"][aria-expanded="true"] .web-interaction-md::after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f106"; /* fa-chevron-up */
+}
+
+.collapsable-option {
+    padding-left: 18px;
+}
+
+.sidebar-option-collapsable {
+    padding-left: 32px;
+}
+
+.navbar-header-img-container {
+    width: 100% !important;
+    display: flex;
+    justify-content: end;
+    padding-right: 15%;
+}
+
+
+@media (min-width: 768px) {
+    .navbar-header-img-container {
+        justify-content: center;
+    }
+
+        .navbar-header-img-container img {
+            width: 320px !important;
+        }
+}

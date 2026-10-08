@@ -1,0 +1,4 @@
+var dxCellTemplates = new DxCellTemplates();
+var dxActionButtons = new DxActionButtons();
+var dxErrorHandler = new DxErrorHandler();
+var dxTreeListHandler = new DxTreeListHandler();

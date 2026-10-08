@@ -1,0 +1,226 @@
+﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+// for details on configuring this project to bundle and minify static web assets.
+
+// A list of forms and the data they were loaded with.
+var formsInitialData = [];
+
+// Fallback message in case of unhandled error on AJAX call.
+const defaultErrorMessage = "An unexpected error ocurred (Code 000)";
+
+$(function () {
+	const styles = {
+		0: "Gray",
+		1: "Red",
+		2: "Orange",
+		3: "Yellow",
+		4: "Green",
+		5: "Teal",
+		6: "Blue",
+		7: "Indigo",
+		8: "Purple",
+		9: "Pink",
+	}
+
+	getTagStyle = (key) => {
+		return styles[key]
+	}
+
+	// Autohide sidebar for mobile
+	$(document).click(function () {
+		if (window.innerWidth < 1170) {
+			$('body').trigger('resize');
+			$('body').addClass('mini-sidebar');
+			$('.navbar-brand span').hide();
+
+			$('body').removeClass('show-sidebar');
+			$('.nav-toggler i').addClass('ti-menu');
+			$('.nav-toggler i').removeClass('ti-close');
+		}
+	});
+
+	$('.left-sidebar, .sidebartoggler, .nav-toggler').click(function (e) {
+		window.innerWidth < 1170 && e.stopPropagation()
+	})
+
+	// Set the data each form was loaded with.
+	setFormInitialData();
+
+	$('form').each(function (index, form) {
+
+		// Prevent multiple submit on forms
+		$(form).submit(function () {
+
+			// Inform which that this form is submitting.
+			formsInitialData[index].isSubmitting = true;
+
+			if ($(this).valid()) {
+				// Check if something needs to be proccesed before submit
+				const pipeline = $(this).data("pipeline");
+				if (pipeline) {
+					for (const operation in pipeline) {
+						pipeline[operation]()
+					}
+				}
+
+				$('button[type=submit]', this).attr('disabled', 'disabled');
+			}
+		});
+	});
+
+	// Check if any form requires confirmation before unloading.
+	$(window).on('beforeunload', event => onBeforeUnload(event));
+
+	waitUntilElementExists = (element, callback) => {
+		var elementIsLoaded = setInterval(function () {
+			if (element != undefined) {
+				callback()
+				clearInterval(elementIsLoaded);
+			}
+		}, 100);
+	}
+
+	dateToString = (date) => {
+		let day = date.getDate()
+		if (day < 10)
+			day = `0${day}`
+
+		let month = date.getMonth() + 1
+		if (month < 10)
+			month = `0${month}`
+
+		const year = date.getFullYear()
+		return `${year}-${month}-${day}`
+	}
+})
+
+Function.prototype.pass = function () {
+	var args = arguments,
+		func = this;
+
+	return function () {
+		func.apply(this, args);
+	}
+};
+
+function onBeforeUnload(event) {
+	const anyFormIsSubmitting = formsInitialData.find(f => f.isSubmitting);
+	const ignoreUnload = formsInitialData.filter(f => f.ignoreUnload).length === formsInitialData.length;
+
+	// Ignore confirmation when its triggered by a submit or if none of the forms require it.
+	if (anyFormIsSubmitting || ignoreUnload)
+		return undefined;
+
+	// Ignore confirmation if no changes were applied to the any of the forms.
+	if (!anyFormChanged(formsInitialData))
+		return undefined;
+
+	return showUnloadConfirmationDialog(event);
+}
+
+function showUnloadConfirmationDialog(event) {
+	// More info: https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event
+	event.preventDefault();
+	event.returnValue = '';
+	return '';
+}
+
+function anyFormChanged(formsInitialData) {
+	var result = false;
+	$('form').each(function (index, form) {
+		if (formsInitialData[index].data != $(form).serialize())
+			result = true;
+	});
+
+	return result;
+}
+
+function setFormInitialData() {
+	formsInitialData = [];
+	$('form').each(function (index, form) {
+		var attrIgnoreUnload = $(form).attr('ignore-unload');
+		formsInitialData.push({
+			index,
+			data: $(form).serialize(),
+			isSubmitting: false,
+			ignoreUnload: !(typeof attrIgnoreUnload === typeof undefined || attrIgnoreUnload === false)
+		});
+	});
+}
+
+/**
+ * Gets current view model as JSON.
+ * @returns {object} Current view model.
+ **/
+function getCurrentViewModel() {
+	const properties = getDomProperties();
+
+	return buildJson();
+
+	/**
+	 * Gets all DOM's properties as a collection whose items's name is the view model's property path
+	 * and its value, is view model's property value.
+	 * @returns {{name:string, value:string}[]} Properties collection.
+	 **/
+	function getDomProperties() {
+		const properties = [];
+
+        $("input, select, textarea").each(function() {
+            const propName = $(this).attr("name");
+            const propValue = $(this).val();
+            addProperty(propName, propValue);
+		});
+
+		return properties;
+
+		/**
+		 * Adds to properties collection a new property called 'name' with value 'value'
+		 * if and only if name is definied.
+		 * @param {string} name Property name.
+		 * @param {string} value Property value.
+		 **/
+		function addProperty(name, value) {
+			if (name) {
+				addOrReplace();
+			}
+
+			/**
+			 * If propeties collection hasn't property, adds it. Otherwise, checks if 
+			 * previous value is defined; if not and if current value is defined, replaces it.
+			 **/
+			function addOrReplace() {
+				const index = properties.findIndex(p => p.name === name);
+				if (index === -1) {
+					properties.push({ name, value });
+				}
+				else if (!properties[index].value && value) {
+					properties[index].value = value;
+				}
+			}
+		}
+    }
+
+	/**
+	 * Creates a JSON form properties collection.
+	 * @returns {object} Properties as JSON.
+	 * */
+	function buildJson() {
+		const viewModel = {};
+		for (const property of properties) {
+			_.set(viewModel, property.name, property.value);
+		}
+
+		return viewModel;
+	}
+}
+
+/**
+ * Clears the select's dropdown selection.
+ * @param {jQueryStatic} $select A jQuery selector pointing to a 'select' DOM element.
+ */
+function clearDropdownSelection($select) {
+	$select.val(null);
+	$select.find('option').each(function () {
+		$(this).removeAttr("selected");
+	});
+	$select.trigger("change");
+}

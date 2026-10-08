@@ -1,0 +1,55 @@
+$("ignite-datetime-picker input.date-picker").on(
+  "change keyup blur",
+  (event) => {
+    const $target = $(event.target).closest("ignite-datetime-picker");
+    if ($target.attr("disabled") === undefined) {
+      datePickerUpdateStatus($target, event.currentTarget.value);
+      setTimeout(() => {
+        const errors = $target.find(".field-validation-error").length;
+        if (errors > 0) {
+          $target.attr("with-errors", "");
+        } else {
+          $target.removeAttr("with-errors", "");
+        }
+      }, 1);
+    }
+  }
+);
+
+$("ignite-datetime-picker").each((index, element) => {
+  const $target = $(element).find("input.date-picker");
+  datePickerUpdateStatus($target);
+
+  // Add data attribute as flag for conditional styles when there are validation errors
+  const errors = $(element).find(".field-validation-error").length;
+  if (errors > 0) {
+    $(element).attr("with-errors", "");
+  }
+
+  // Move validation error messages outside of the form group
+  $("<div class='validations-container'></div>").appendTo(element);
+  const $validation = $(element)
+    .find(".form-control-feedback")
+    .map((_, el) => {
+      const itemContainer = $(
+        "<div class='validation-element'><img src='/images/alma-validation-error.png'/></div>"
+      );
+      $(el).prependTo(itemContainer);
+      return itemContainer[0];
+      // return el;
+    });
+  $validation.appendTo($(element).find(".validations-container"));
+});
+
+function datePickerUpdateStatus($selection, value) {
+  const val = value || $selection.val();
+  const $parent = $selection.closest("ignite-datetime-picker");
+
+  if (val.length > 0) {
+    $parent.attr("not-empty", "");
+    $parent.removeAttr("empty", "");
+    return;
+  }
+  $parent.attr("empty", "");
+  $parent.removeAttr("not-empty", "");
+}

@@ -1,0 +1,112 @@
+const toggleInputType = (event) => {
+  // Getting input type
+  const $input = $(event.currentTarget).siblings("input");
+  const currentInputType = $input.attr("type");
+
+  // Toggle type and icon
+  if (currentInputType === "password") {
+    $input.attr("type", "text");
+    $(event.currentTarget).attr("src", "/images/alma-icons/view-off.svg");
+  } else {
+    $input.attr("type", "password");
+    $(event.currentTarget).attr("src", "/images/alma-icons/view-on.svg");
+  }
+};
+
+$("ignite-input").each((index, element) => {
+  // Add data attribute as flag for conditional styles when the input has no label
+  const hasLabel =
+    $(element).find(".form-group label").text().trim().length > 0;
+  if (!hasLabel) {
+    $(element).attr("value-only", "");
+  }
+
+  // Add data attribute as flag for conditional styles based on the content of the input
+  const initialLength = $(element).find("input").val();
+  if (initialLength.length > 0) {
+    $(element).attr("not-empty", "");
+    $(element).removeAttr("empty", "");
+  } else {
+    $(element).attr("empty", "");
+    $(element).removeAttr("not-empty", "");
+  }
+
+  // Add data attribute as flag for conditional styles when there are validation errors
+  const errors = $(element).find(".field-validation-error").length;
+  if (errors > 0) {
+    $(element).attr("with-errors", "");
+  }
+
+  // Updates the state of the input every time a key was pressed
+  $(element).on("keyup", (event) => {
+    const $input = $(event.currentTarget).find("input");
+    const inputValue = $input.val();
+    if (inputValue.length > 0) {
+      $(element).attr("not-empty", "");
+      $(element).removeAttr("empty", "");
+    } else {
+      $(element).attr("empty", "");
+      $(element).removeAttr("not-empty", "");
+    }
+
+    setTimeout(() => {
+      const errors = $(event.currentTarget)
+        .closest("ignite-input")
+        .find(".field-validation-error").length;
+      if (errors > 0) {
+        $(element).attr("with-errors", "");
+      } else {
+        $(element).removeAttr("with-errors", "");
+      }
+    }, 1);
+  });
+
+  $("form").on("submit", (event) => {
+    const fields = $(event.currentTarget)
+      .find("ignite-input")
+      .each((_, el) => {
+        setTimeout(() => {
+          const errors = $(el).find(".field-validation-error").length;
+          if (errors > 0) {
+            $(el).attr("with-errors", "");
+          } else {
+            $(el).removeAttr("with-errors", "");
+          }
+        }, 1);
+      });
+  });
+
+  // Move validation error messages outside of the form group
+  $("<div class='validations-container'></div>").appendTo(element);
+  const $validation = $(element)
+    .find(".form-control-feedback")
+    .map((_, el) => {
+      const itemContainer = $(
+        "<div class='validation-element'><img src='/images/alma-validation-error.png'/></div>"
+      );
+      $(el).prependTo(itemContainer);
+      return itemContainer[0];
+      // return el;
+    });
+  $validation.appendTo($(element).find(".validations-container"));
+
+  // Adding toggle for password inputs
+  const inputType = $(element).find("input.form-control").attr("type");
+  if (inputType === "password") {
+    // Moving input and label to a new container
+    const newInputContainer = $(
+      "<div class='input-with-password-container'></div>"
+    );
+    $(element).find("input.form-control").appendTo(newInputContainer);
+    $(element).find(".form-group label").appendTo(newInputContainer);
+
+    // Creating the new icon to toggle password visibility
+    const $icon = $("<img src='/images/alma-icons/view-on.svg' />");
+
+    // Attaching on click event to trigger the toggle
+    $icon.on("click", toggleInputType);
+
+    $icon.appendTo(newInputContainer);
+    newInputContainer.prependTo($(element).find(".form-group"));
+  }
+});

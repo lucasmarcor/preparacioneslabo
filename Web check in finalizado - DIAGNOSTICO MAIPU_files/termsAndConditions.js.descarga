@@ -1,0 +1,15 @@
+const termsAndConditionsModalSelector = "#termsAndConditionsModal";
+
+const termsAndConditionsChangeRequest = new UserClaimChangeRequest({
+    endpoint: `/Account/AcceptTermsAndConditions`,
+    getTokenFunction: () => $(termsAndConditionsModalSelector).children('[name="__RequestVerificationToken"]').val(),
+    successCallback: function () {
+        $(termsAndConditionsModalSelector).modal('hide');
+    }
+});
+
+new AutopromptedMandatoryModal({
+    modalSelector: termsAndConditionsModalSelector,
+    acceptButtonSelector: "#btn-accept-terms",
+    acceptButtonCallback: termsAndConditionsChangeRequest.asCallback()
+});
