@@ -17,16 +17,64 @@
     .sidebar-scroll::-webkit-scrollbar { width: 6px; }
     .sidebar-scroll::-webkit-scrollbar-thumb { background-color: #e2e8f0; border-radius: 10px; }
     
+    /* Encabezado exclusivo para PDF oculto en web */
+    .print-header { display: none; }
+    
     /* Estilos de impresión exclusivos para la calculadora */
     @media print {
-      .no-print, aside, .top-content { display: none !important; }
-      main { width: 100% !important; margin: 0 !important; padding: 0 !important; background: white !important; }
-      .app-container { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0 !important; }
-      .app-container > section:first-child { display: none !important; }
-      .app-container > section:last-child, .app-container > section:last-child > div { grid-column: 1 / -1 !important; height: auto !important; border: none !important; }
-      .prep-card { border: 1.5pt solid #ccc !important; margin-bottom: 15pt !important; padding: 15pt !important; page-break-inside: avoid; }
-      .disclaimer-print { border-left: 3pt solid #000 !important; background: white !important; color: black !important; page-break-inside: avoid; margin-top: 15pt !important; padding: 10pt !important; }
-      .alert-print { border-left: 3pt solid #dc2626 !important; background: white !important; color: black !important; }
+      /* Ocultar elementos innecesarios */
+      .no-print, aside, .top-content, .md\:col-span-7, .print\:hidden { display: none !important; }
+      
+      /* Ajustar contenedores para evitar cortes y permitir múltiples páginas */
+      body, main, .md\:col-span-5 > div, .flex-grow { 
+        overflow: visible !important; 
+        height: auto !important; 
+        background: white !important; 
+      }
+      main { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+      .md\:col-span-5 { width: 100% !important; display: block !important; border: none !important; }
+      
+      /* Mostrar encabezado solicitado con fondo morado */
+      .print-header { 
+        display: block !important; 
+        background-color: #70006a !important; 
+        color: white !important; 
+        padding: 16px !important; 
+        font-size: 1.25rem !important; 
+        font-weight: 700 !important; 
+        border-radius: 0.5rem !important; 
+        margin-bottom: 20px !important; 
+        text-align: center !important; 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
+      }
+      
+      /* Mantener estilo de recuadros y fondo blanco */
+      .prep-card { 
+        border: 1px solid #e2e8f0 !important; 
+        margin-bottom: 15pt !important; 
+        padding: 15pt !important; 
+        page-break-inside: avoid; 
+        background: white !important; 
+        border-radius: 0.5rem !important; 
+      }
+      .disclaimer-print { 
+        border: 1px solid #e2e8f0 !important;
+        border-left: 4px solid #70006a !important; 
+        background: white !important; 
+        color: black !important; 
+        page-break-inside: avoid; 
+        margin-top: 15pt !important; 
+        padding: 10pt !important; 
+        border-radius: 0.5rem !important;
+      }
+      .alert-print { 
+        border: 1px solid #e2e8f0 !important;
+        border-left: 4px solid #dc2626 !important; 
+        background: white !important; 
+        color: black !important; 
+        border-radius: 0.5rem !important;
+      }
       h3, h4 { color: black !important; }
       @page { margin: 1.5cm; }
     }
@@ -121,7 +169,7 @@
         
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                     <!-- Columna Izquierda Calculadora -->
-                    <section class="md:col-span-7 flex flex-col gap-4">
+                    <section class="md:col-span-7 flex flex-col gap-4 print:hidden">
                         <div class="bg-white p-4 border border-slate-200 flex flex-col gap-3">
                             <div class="flex flex-col sm:flex-row gap-3 w-full">
                                 <div class="relative flex-grow">
@@ -142,8 +190,8 @@
                     </section>
 
                     <!-- Columna Derecha Calculadora -->
-                    <section class="md:col-span-5 flex flex-col gap-4">
-                        <div class="bg-white border border-slate-200 flex flex-col h-[584px]">
+                    <section class="md:col-span-5 flex flex-col gap-4 print:block print:w-full">
+                        <div class="bg-white border border-slate-200 flex flex-col h-[584px] print:h-auto print:border-none print:shadow-none">
                             
                             <!-- Ocultos en impresión -->
                             <div class="bg-pink-50 px-4 py-3 border-b border-pink-100 font-semibold text-sm text-[#70006a] flex justify-between items-center print:hidden">
@@ -159,7 +207,12 @@
                             </div>
 
                             <!-- Contenedor Principal (Visible en PDF) -->
-                            <div class="flex-grow p-4 overflow-y-auto flex flex-col">
+                            <div class="flex-grow p-4 overflow-y-auto flex flex-col print:overflow-visible print:p-0">
+                            
+                            <div class="print-header">
+                              Laboratorio Maipú - Indicaciones para análisis
+                            </div>
+                            
                             <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-1.5 print:hidden">
                                 <i data-lucide="info" class="w-4 h-4 text-[#70006a]"></i> Resumen de Indicaciones
                             </h3>
