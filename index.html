@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web check in finalizado - DIAGNOSTICO MAIPU</title>
+  
+  <!-- Tailwind CSS y Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    
+    /* Scrollbar personalizado para el menú lateral */
+    .sidebar-scroll::-webkit-scrollbar { width: 6px; }
+    .sidebar-scroll::-webkit-scrollbar-thumb { background-color: #e2e8f0; border-radius: 10px; }
+    
+    /* Estilos de impresión exclusivos para la calculadora */
+    @media print {
+      .no-print, aside, .top-content { display: none !important; }
+      main { width: 100% !important; margin: 0 !important; padding: 0 !important; background: white !important; }
+      .app-container { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0 !important; }
+      .app-container > section:first-child { display: none !important; }
+      .app-container > section:last-child, .app-container > section:last-child > div { grid-column: 1 / -1 !important; height: auto !important; border: none !important; }
+      .prep-card { border: 1.5pt solid #ccc !important; margin-bottom: 15pt !important; padding: 15pt !important; page-break-inside: avoid; }
+      .disclaimer-print { border-left: 3pt solid #000 !important; background: white !important; color: black !important; page-break-inside: avoid; margin-top: 15pt !important; padding: 10pt !important; }
+      .alert-print { border-left: 3pt solid #dc2626 !important; background: white !important; color: black !important; }
+      h3, h4 { color: black !important; }
+      @page { margin: 1.5cm; }
+    }
+  </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-[#fafafa] text-slate-800">
+
+  <!-- ========================================== -->
+  <!-- SIDEBAR (VISUAL - REPLICA MAIPÚ)           -->
+  <!-- ========================================== -->
+  <aside class="w-[280px] bg-white h-full flex flex-col shrink-0 border-r border-slate-200 shadow-[2px_0_15px_rgba(0,0,0,0.03)] z-10 no-print">
+    
+    <!-- Logo Falso (Visual) -->
+    <div class="pt-8 pb-6 px-6 flex justify-center items-center">
+      <div class="text-[#70006a] text-center leading-none">
+        <div class="text-4xl font-light tracking-tighter mb-1" style="font-family: Georgia, serif;">dm</div>
+        <div class="flex items-center justify-center gap-2">
+            <span class="text-sm font-semibold tracking-tight">diagnóstico<br>maipú</span>
+            <span class="text-2xl font-light text-slate-300">|</span>
+            <span class="text-[10px] font-medium text-left leading-tight">portal<br>pacientes<br><span class="text-[8px] font-normal opacity-70">turnos y resultados</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usuario -->
+    <div class="px-6 py-5 flex items-center gap-3 text-sm font-medium text-slate-700">
+      <i data-lucide="user" class="w-5 h-5 text-slate-500"></i>
+      <span class="truncate tracking-wide">LUCAS GABRIEL MARCO</span>
+    </div>
+
+    <!-- Menú de Navegación -->
+    <nav class="sidebar-scroll flex-1 overflow-y-auto px-4 py-2 space-y-1">
+      <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 mt-4 px-2 flex items-center gap-2">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i> Menu
+      </div>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="clock" class="w-4 h-4 text-slate-400"></i> Turnos</a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i> Resultados</a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-800 bg-slate-100 rounded-lg font-medium"><i data-lucide="check-circle" class="w-4 h-4 text-slate-600"></i> Web Check In</a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="users" class="w-4 h-4 text-slate-400"></i> Grupo familiar</a>
+
+      <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 mt-8 px-2 flex items-center gap-2">
+          <i data-lucide="sliders" class="w-3.5 h-3.5"></i> General
+      </div>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="refresh-cw" class="w-4 h-4 text-slate-400"></i> Cambiar contraseña</a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="file" class="w-4 h-4 text-slate-400"></i> Términos y Condiciones</a>
+      
+      <div class="flex items-center justify-between px-3 py-2 text-sm text-slate-800 font-medium cursor-pointer mt-1">
+          <div class="flex items-center gap-3"><i data-lucide="help-circle" class="w-4 h-4 text-slate-500"></i> Ayuda</div>
+          <i data-lucide="chevron-up" class="w-4 h-4 text-slate-400"></i>
+      </div>
+      <div class="pl-8 space-y-1 mb-4">
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="phone" class="w-4 h-4 text-slate-400"></i> Contacto</a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i> Preguntas Frecuentes</a>
+      </div>
+    </nav>
+
+    <!-- Footer Sidebar -->
+    <div class="p-4 border-t border-slate-200">
+      <a href="#" class="flex items-center justify-between gap-3 px-3 py-2 text-sm text-slate-500 hover:text-slate-800 transition-colors">
+        <div class="flex items-center gap-3"><i data-lucide="log-out" class="w-4 h-4"></i> Salir</div>
+        <i data-lucide="help-circle" class="w-6 h-6 text-[#70006a]"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- CONTENIDO PRINCIPAL                        -->
+  <!-- ========================================== -->
+  <main class="flex-1 h-full overflow-y-auto">
+    <div class="max-w-[1100px] mx-auto p-8 md:p-12">
+        
+        <!-- Encabezados de Maipú (No funcionales) -->
+        <div class="top-content">
+            <div class="flex items-center gap-4 mb-8">
+                <button class="p-1 hover:bg-slate-200 rounded-full transition cursor-pointer"><i data-lucide="arrow-left" class="w-6 h-6 text-slate-800"></i></button>
+                <h1 class="text-[22px] font-bold text-slate-900 tracking-tight">Web check in finalizado</h1>
+            </div>
+
+            <div class="mb-10 pl-11">
+                <h2 class="text-[22px] font-light text-blue-500 mb-6 tracking-wide">Web Check In registrado</h2>
+                <div class="space-y-4 text-slate-500 font-light text-[15px] leading-relaxed max-w-3xl">
+                    <p>¡Gracias por usar Web Check In! Sabemos que tu tiempo vale.</p>
+                    <p>Tu WC fue aprobado. Podés acercarte sin turno y ser atendido con prioridad en nuestro laboratorio.</p>
+                    <p>Accedé a los siguientes links para conocer:</p>
+                    <p>Sedes habilitadas para su cobertura y horarios 👉 <a href="#" class="text-blue-400 hover:underline">https://www.diagnosticomaipu.com/sedes</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- APP DE PREPARACIONES (FUNCIONAL)           -->
+        <!-- ========================================== -->
+        
+        <!-- Cuadro con bordes negros solicitado -->
+        <div class="pl-0 md:pl-11 app-container">
+            <div class="border-[3px] border-black w-full bg-slate-50 p-4 shadow-sm">
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <!-- Columna Izquierda Calculadora -->
+                    <section class="md:col-span-7 flex flex-col gap-4">
+                        <div class="bg-white p-4 border border-slate-200 flex flex-col gap-3">
+                            <div class="flex flex-col sm:flex-row gap-3 w-full">
+                                <div class="relative flex-grow">
+                                    <i data-lucide="search" class="w-5 h-5 absolute left-3 top-2.5 text-slate-400"></i>
+                                    <input type="text" id="buscador" placeholder="Buscar estudio por nombre o código..." oninput="filtrarEstudios()" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#70006a] text-sm">
+                                </div>
+                            </div>
+                            <div id="botonesCategorias" class="flex flex-wrap gap-1.5 pt-1"></div>
+                        </div>
+
+                        <div class="bg-white border border-slate-200 overflow-hidden flex flex-col h-[460px]">
+                            <div class="bg-slate-100 px-4 py-3 border-b border-slate-200 font-semibold text-sm text-slate-700 flex justify-between items-center">
+                            <span>Estudios Disponibles</span>
+                            <span id="contadorDisponibles" class="text-xs bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full">0</span>
+                            </div>
+                            <div id="listaEstudios" class="overflow-y-auto p-3 space-y-2 flex-grow"></div>
+                        </div>
+                    </section>
+
+                    <!-- Columna Derecha Calculadora -->
+                    <section class="md:col-span-5 flex flex-col gap-4">
+                        <div class="bg-white border border-slate-200 flex flex-col h-[584px]">
+                            
+                            <!-- Ocultos en impresión -->
+                            <div class="bg-pink-50 px-4 py-3 border-b border-pink-100 font-semibold text-sm text-[#70006a] flex justify-between items-center print:hidden">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="check-square" class="w-4 h-4 text-[#70006a]"></i>
+                                <span>Estudios Seleccionados (<span id="contadorSeleccionados">0</span>)</span>
+                            </div>
+                            <button onclick="limpiarSeleccion()" class="text-xs text-[#70006a] hover:underline font-medium">Limpiar todo</button>
+                            </div>
+
+                            <div id="tagsSeleccionados" class="p-3 border-b border-slate-200 flex flex-wrap gap-1.5 max-h-32 overflow-y-auto bg-slate-50/50 print:hidden">
+                            <span class="text-xs text-slate-400 italic">Ningún estudio seleccionado</span>
+                            </div>
+
+                            <!-- Contenedor Principal (Visible en PDF) -->
+                            <div class="flex-grow p-4 overflow-y-auto flex flex-col">
+                            <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-1.5 print:hidden">
+                                <i data-lucide="info" class="w-4 h-4 text-[#70006a]"></i> Resumen de Indicaciones
+                            </h3>
+                            <div id="preparacionesContenedor" class="flex-grow">
+                                <div class="text-center text-slate-500 py-12">
+                                <i data-lucide="clipboard-list" class="w-16 h-16 mx-auto mb-4 text-slate-300"></i>
+                                <p class="text-lg">Tus indicaciones aparecerán aquí.</p>
+                                <p class="text-sm mt-2">Agregá estudios para detectar reglas e incompatibilidades.</p>
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-2 print:hidden">
+                            <button onclick="window.print()" class="flex-1 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-800 text-white font-medium py-2.5 px-3 transition text-sm">
+                                <i data-lucide="printer" class="w-4 h-4"></i> Guardar PDF
+                            </button>
+                            <button onclick="enviarWhatsApp()" id="btnWhatsApp" disabled class="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium py-2.5 px-3 transition text-sm">
+                                <i data-lucide="message-circle" class="w-5 h-5"></i> Whatsapp
+                            </button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+        </div>
+        <!-- ========================================== -->
+        <!-- FIN APP PREPARACIONES                      -->
+        <!-- ========================================== -->
+
+    </div>
+  </main>
+
+  <!-- Lógica Javascript de la Calculadora -->
+  <script>
+    const reglasIncompatibilidades = [
+      { grupoA: ["4018"], grupoB: ["4030"], mensaje: "UROCULTIVO CON CULTIVO DE STREPTOCOCCUS BETA HEMOLITICO: Urocultivo requiere higiene previa y el cultivo no debe higienizarse 12hs antes. No pueden tomarse al mismo tiempo." },
+      { grupoA: ["905", "191", "O24"], grupoB: ["4040"], mensaje: "RECOLECCION DE ORINA DE 24HS CON ORINA COMPLETA: La ultima orina debe ser recolectada en un frasco esteril aparte de la recolección de orina de 24 horas." },
+      { grupoA: ["167"], grupoB: ["4040"], mensaje: "OXALATO/CITRATO URINARIO CON ORINA COMPLETA: Para Oxalato/citrato (recolección de orina de 24hs) tiene que recolectarse todas las orinas incluso la primera del segundo día. Debe dejar la orina completa pendiente y alcanzarla en otro momento." },
+      { grupoA: ["4019"], grupoB: ["4018"], mensaje: "EXUDADO URETRAL CON UROCULTIVO: El estudio de urocultivo requiere higiene previa de la zona genital. El Exudado requiere no hacer higiene de la zona genital. Deberá hacerlo en momentos distintos." },
+      { grupoA: ["4019"], grupoB: ["4031"], mensaje: "EXUDADO URETRAL CON ESPERMOCULTIVO: El estudio de espermocultivo requiere higiene previa de la zona genital. El Exudado requiere no hacer higiene de la zona genital. Deberá hacerlo en momentos distintos." },
+      { grupoA: ["4008"], grupoB: ["4018"], mensaje: "CULTIVO DE FLUJO VAGINAL Y MATERIAL ENDOCERVICAL CON UROCULTIVO FEMENINO: El estudio de urocultivo requiere higiene previa de la zona genital. El cultivo de flujo requiere que no se haga higiene profunda de la zona genital. Deberá hacerlo en momentos distintos." },
+      { grupoA: ["143"], grupoB: ["143-S"], mensaje: "CATECOLAMINAS URINARIAS (CON Y SIN CONSERVANTE): Si le piden de ambos casos debe hacer 2 recolecciones de 24 hs por separado. Una con conservante (retirando previamente el material por el laboratorio) y otra sin conservante." },
+      { grupoA: ["2708"], grupoB: ["19", "REN"], mensaje: "CATECOLAMINAS PLASMÁTICAS CON RENINA/ALDOSTERONA (Deambulación): Catecolaminas requiere reposo previo en sala de espera. Renina y aldosterona con deambulación no debe estar en reposo. Debe hacerlo en días separados." },
+      { grupoA: ["AMET"], grupoB: ["905", "191", "O24"], mensaje: "ACIDO METILMALONICO/ACIDOS ORGANICOS EN ORINA CON RECOLECCION DE 24HS: Deben hacerse por separado. Metilmalónico/organicos son muestras aisladas durante esas horas y recolección de 24hs son todas las micciones." },
+      { grupoA: ["PROL", "189", "6"], grupoB: ["19", "REN"], mensaje: "PROLACTINA - CORTISOL - ACTH Y RENINA - ALDOSTERONA: Prolactina, cortisol y ACTH debe asistir 7.30hs para hacer la extracción a las 8, con reposo previo. Renina y Aldosterona debe concurrir entre las 8 y las 9 con reposo o deambulación segun lo indicado. Hacer en días separados." },
+      { grupoA: ["PROL", "FSH", "LH", "1212", "75", "2711", "ESTR"], grupoB: ["PROG"], mensaje: "PERFIL HORMONAL CON PROGESTERONA: Los primeros se toman entre el día 3 y 5 del ciclo y la progesterona entre el 21 y 24 del mismo ciclo. Si están pedidos en la misma orden, deberá hacer dos extracciones en esos momentos diferentes, salvo otra indicación médica." }
+    ];
+
+    const estudiosBD = [
+      { codigo: "212", nombre: "Vitamina D, 25OHVitD, Calecalciferol, Hidroxicolecalciferol, Calcidiol", categoria: "General", ayunoHoras: 2, preparacion: "Vitamina D: Solo se realiza Vitamina D3." },
+      { codigo: "45", nombre: "Ácido Fólico, Folato, Vitamina B9", categoria: "General", ayunoHoras: 2 },
+      { codigo: "4651", nombre: "Alanina Aminotransferasa, ALT, ALAT, TGP", categoria: "General", ayunoHoras: 2 },
+      { codigo: "546", nombre: "Antitransglutaminada IGA, TTG, ATGA", categoria: "General", ayunoHoras: 2 },
+      { codigo: "621", nombre: "Orina 24 horas", categoria: "Orina", ayunoHoras: 0, preparacion: "Orina 24hs: Cuando se levante por la mañana, orinar normalmente en el inodoro y vaciar la vejiga, descartando esa orina. A partir de ese momento, recolectar en botellas limpias y secas (de agua mineral) todas las orinas que elimine a lo largo del día y de la noche, en su totalidad. En la mañana siguiente, hacer una última recolección a la misma hora que anotó el día anterior. IMPORTANTE: Si en su orden médica tiene solicitado además un análisis de orina completa y/o pH urinario, la última orina a recolectar deberá juntarla por separado en un frasco estéril y aclarar al extraccionista que forma parte de la de 24 horas. Remitir al Laboratorio la totalidad del volumen recolectado. Durante la recolección debe mantener la muestra refrigerada en la heladera." },
+      { codigo: "324", nombre: "Cannabinoides en orina, Marihuana, TCH", categoria: "Orina", ayunoHoras: 0, preparacion: "Cannabinoides: La muestra de orina será recolectada en el laboratorio bajo vigilancia. Deberá tener una retención urinaria de 3 horas como mínimo." },
+      { codigo: "89", nombre: "Cortisol, Cortisol matutino, Cortisol 8hs", categoria: "Hormonas", ayunoHoras: 2, preparacion: "Cortisol: Deberá presentarse a las 7:30 en el laboratorio. La extracción se realizará entre las 8:00 y las 9:00hs previo reposo." },
+      { codigo: "471", nombre: "Estradiol, E2", categoria: "General", ayunoHoras: 2 },
+      { codigo: "5018", nombre: "Colesterol Total, CT", categoria: "General", ayunoHoras: 8 },
+      { codigo: "63", nombre: "HIV I y II", categoria: "General", ayunoHoras: 2, preparacion: "HIV requiere presentar orden médica sí o sí." },
+      { codigo: "4018", nombre: "17-Hidroxiprogesterona, 17OHP4, 17 Alfa Hidroxiprogesterona", categoria: "General", ayunoHoras: 2, preparacion: "Progesterona: Realizar entre el día 21 y 24 del ciclo menstrual" },
+      { codigo: "4030", nombre: "Cultivo de Streptococcus Beta Hemolítico, SHBG", categoria: "Cultivos", ayunoHoras: 0, preparacion: "Cultivo de Streptococcus: Deberá suspender antibióticos y relaciones sexuales 48 horas antes y no realizar higiene de la zona genital durante las 12 horas previas a la toma de la muestra." },
+      { codigo: "O24", nombre: "Creatinina en Orina, Clearence de creatinina", categoria: "Orina", ayunoHoras: 0, preparacion: "Clearence de creatinina: Cuando se levante por la mañana, orinar normalmente en el inodoro y vaciar la vejiga, descartando esa orina. Anotar fecha y hora. A partir de ese momento, recolectar en botellas limpias y secas (de agua mineral) todas las orinas que elimine a lo largo del día y de la noche, en su totalidad. En la mañana siguiente, hacer una última recolección a la misma hora que anotó el día anterior. IMPORTANTE: Si en su orden médica tiene solicitado además un análisis de orina completa y/o pH urinario, la última orina a recolectar deberá juntarla por separado en un frasco estéril y aclarar al extraccionista que forma parte de la de 24 horas. Remitir al Laboratorio la totalidad del volumen recolectado. Durante la recolección debe mantener la muestra refrigerada en la heladera." },
+      { codigo: "167", nombre: "Oxalato y Citrato en Orina 24hs", categoria: "Orina", ayunoHoras: 0, preparacion: "Oxalato: Evite 48 horas antes de realizar la recolección de orina tomar ácido ascórbico, té, mate, café y chocolate o comer alimentos que contengan oxalato como las espinacas, frutillas, tomates. Recolección de la muestra: Descarte la primera orina de la mañana, vaciando totalmente su vejiga, anote la hora. A partir de ese momento y hasta la misma hora del día siguiente, junte la totalidad de orina emitida, incluyendo la última. Es muy importante que no pierda ninguna de las muestras, ya que esto altera los resultados. Ejemplo: si se levanta a las 7:00hs. descarte esa primera orina y junte todas las muestras hasta las 7:00hs. de la mañana del día siguiente, incluyendo esta última muestra." },
+      { codigo: "4019", nombre: "Cultivo de Exudado Uretral", categoria: "Cultivos", ayunoHoras: 0, preparacion: "" },
+      { codigo: "4031", nombre: "Colesterol LDL, LDL", categoria: "General", ayunoHoras: 8 },
+      { codigo: "4008", nombre: "Cultivo de Flujo Vaginal y Endocervical", categoria: "Cultivos", ayunoHoras: 0, preparacion: "Cultivo de Flujo: La toma de muestra se debe realizar entre el día 10 y 14 del ciclo menstrual. Deberá suspender relaciones sexuales y antibióticos 48 horas antes." },
+      { codigo: "143", nombre: "Catecolaminas Urinarias con conservante", categoria: "Orina", ayunoHoras: 0, preparacion: "Retirar frasco con conservante ácido del laboratorio previamente." },
+      { codigo: "143-S", nombre: "Catecolaminas Urinarias sin conservante", categoria: "Orina", ayunoHoras: 0, preparacion: "Recolectar orina 24hs en envase limpio sin agregados químicos." },
+      { codigo: "2708", nombre: "Catecolaminas Plasmáticas", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Requiere reposo previo prolongado en la sala de espera." },
+      { codigo: "19", nombre: "Aldosterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Ayuno de 8 horas. Confirmar si es en reposo o con deambulación." },
+      { codigo: "REN", nombre: "Renina", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Ayuno de 8 horas. Confirmar si es en reposo o con deambulación." },
+      { codigo: "4853", nombre: "Gonadotrofina Corionica Humana, HCG, Sub unidad Beta, SHBG", categoria: "General", ayunoHoras: 2},
+      { codigo: "4874", nombre: "Hemograma, HMG", categoria: "General", ayunoHoras: 2},
+      { codigo: "PROL", nombre: "Prolactina, PRL", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Asistir 7:30hs, reposo previo, extracción a las 8:00hs." },
+      { codigo: "6", nombre: "ACTH (Matutino 8am)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Prolactina: 24hs de abstinencia sexual, deberá contar con 2 horas de vigilia. Presentar a las 7:30 en el laboratorio. La extracción se realizará entre las 8:00 y las 9:00 previo reposo." },
+      { codigo: "FSH", nombre: "FSH (Hormona Foliculoestimulante)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Extracción entre el día 3 y 5 del ciclo menstrual." },
+      { codigo: "LH", nombre: "LH (Hormona Luteinizante)", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Extracción entre el día 3 y 5 del ciclo menstrual." },
+      { codigo: "1212", nombre: "17-Hidroxiprogesterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Progesterona: Extracción entre el día 21 y 24 del ciclo menstrual." },
+      { codigo: "ESTR", nombre: "Estradiol", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Estradiol: Extracción entre el día 3 y 5 del ciclo menstrual." },
+      { codigo: "PROG", nombre: "Progesterona", categoria: "Hormonas", ayunoHoras: 8, preparacion: "Progesterona: Extracción entre el día 21 y 24 del ciclo menstrual." },
+      { codigo: "15", nombre: "Albúmina en Sangre", categoria: "General", ayunoHoras: 8, preparacion: "Sin preparación específica." },
+      { codigo: "4040", nombre: "Orina Completa", categoria: "Orina", ayunoHoras: 0, preparacion: "Orina Completa: Recolectar el chorro medio de una orina que tenga 3 horas de retención como mínimo, previa higiene de la zona genital." }
+    ];
+
+    let seleccionados = [];
+    let categoriaSeleccionada = "";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      cargarBotonesCategorias();
+      renderizarLista(estudiosBD);
+      lucide.createIcons();
+    });
+
+    function cargarBotonesCategorias() {
+      const contenedor = document.getElementById("botonesCategorias");
+      const categorias = [...new Set(estudiosBD.map(e => e.categoria))];
+      const emojis = { "Hormonas": "🧪", "General": "🔬", "Orina": "💧", "Cultivos": "🧫" };
+
+      let html = `<button onclick="filtrarPorCategoria('')" class="px-3 py-1.5 border text-xs font-medium transition ${categoriaSeleccionada === '' ? 'bg-[#70006a] text-white border-[#70006a]' : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-300'}">📋 Todos</button>`;
+      categorias.forEach(cat => {
+        const emoji = emojis[cat] || "🏷️";
+        const activo = categoriaSeleccionada === cat;
+        html += `<button onclick="filtrarPorCategoria('${cat}')" class="px-3 py-1.5 border text-xs font-medium transition ${activo ? 'bg-[#70006a] text-white border-[#70006a]' : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-300'}">${emoji}${cat}</button>`;
+      });
+      contenedor.innerHTML = html;
+    }
+
+    function filtrarPorCategoria(cat) {
+      categoriaSeleccionada = cat;
+      cargarBotonesCategorias();
+      filtrarEstudios();
+    }
+
+    function filtrarEstudios() {
+      const texto = document.getElementById("buscador").value.toLowerCase();
+      const filtrados = estudiosBD.filter(e => {
+        const coincidenciaTexto = e.nombre.toLowerCase().includes(texto) || e.codigo.toLowerCase().includes(texto);
+        const coincideCat = categoriaSeleccionada === "" || e.categoria === categoriaSeleccionada;
+        return coincidenciaTexto && coincideCat;
+      });
+      renderizarLista(filtrados);
+    }
+
+    function renderizarLista(estudios) {
+      const contenedor = document.getElementById("listaEstudios");
+      document.getElementById("contadorDisponibles").textContent = estudios.length;
+
+      if (estudios.length === 0) {
+        contenedor.innerHTML = `<p class="text-slate-400 text-sm text-center py-8">No se encontraron estudios.</p>`;
+        return;
+      }
+
+      contenedor.innerHTML = estudios.map(e => {
+        const estaSeleccionado = seleccionados.some(s => s.codigo === e.codigo);
+        return `
+          <div onclick="toggleEstudio('${e.codigo}')" class="p-3 border cursor-pointer transition flex items-center justify-between text-sm ${estaSeleccionado ? 'bg-pink-50 border-pink-300' : 'bg-white border-slate-200 hover:border-slate-300'}">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" ${estaSeleccionado ? 'checked' : ''} onclick="event.stopPropagation(); toggleEstudio('${e.codigo}')" class="rounded text-[#70006a] focus:ring-[#70006a] w-4 h-4 cursor-pointer border-slate-300">
+              <div>
+                <span class="font-semibold text-slate-800">${e.nombre}</span>
+                <span class="text-xs text-slate-500 block">${e.categoria} (Cód: ${e.codigo})</span>
+              </div>
+            </div>
+            ${e.ayunoHoras > 0 ? `<span class="text-[11px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-medium whitespace-nowrap border border-amber-200">Ayuno ${e.ayunoHoras}h</span>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleEstudio(codigo) {
+      const index = seleccionados.findIndex(s => s.codigo === codigo);
+      if (index > -1) {
+        seleccionados.splice(index, 1);
+      } else {
+        const estudio = estudiosBD.find(e => e.codigo === codigo);
+        if (estudio) seleccionados.push(estudio);
+      }
+      filtrarEstudios();
+      actualizarSeleccion();
+      actualizarPreparaciones();
+    }
+
+    function limpiarSeleccion() {
+      seleccionados = [];
+      filtrarEstudios();
+      actualizarSeleccion();
+      actualizarPreparaciones();
+    }
+
+    function actualizarSeleccion() {
+      document.getElementById("contadorSeleccionados").textContent = seleccionados.length;
+      const tagsContainer = document.getElementById("tagsSeleccionados");
+      const btnWhatsApp = document.getElementById("btnWhatsApp");
+      btnWhatsApp.disabled = seleccionados.length === 0;
+
+      if (seleccionados.length === 0) {
+        tagsContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Ningún estudio seleccionado</span>`;
+        return;
+      }
+
+      tagsContainer.innerHTML = seleccionados.map(e => `
+        <span class="inline-flex items-center gap-1 bg-pink-100 text-[#70006a] border border-pink-200 text-xs px-2 py-1 rounded font-medium">
+          ${e.nombre}
+          <button onclick="toggleEstudio('${e.codigo}')" class="hover:text-pink-950 font-bold ml-0.5">×</button>
+        </span>
+      `).join('');
+    }
+
+    function actualizarPreparaciones() {
+      const preparacionesContenedor = document.getElementById('preparacionesContenedor');
+      if (!preparacionesContenedor) return;
+
+      if (seleccionados.length === 0) {
+        preparacionesContenedor.innerHTML = `
+          <div class="text-center text-slate-400 py-12 print:hidden">
+            <i data-lucide="clipboard-list" class="w-16 h-16 mx-auto mb-4 opacity-50"></i>
+            <p class="text-lg">Tus indicaciones aparecerán aquí.</p>
+            <p class="text-sm mt-2">Agregá estudios para detectar reglas e incompatibilidades.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      let alertasIncompatibilidad = [];
+      reglasIncompatibilidades.forEach(regla => {
+          const hayGrupoA = regla.grupoA.some(cod => seleccionados.some(s => s.codigo === cod));
+          const hayGrupoB = regla.grupoB.some(cod => seleccionados.some(s => s.codigo === cod));
+          if (hayGrupoA && hayGrupoB) {
+              alertasIncompatibilidad.push(regla.mensaje);
+          }
+      });
+
+      let maxAyuno = 0;
+      const preparacionesUnicas = new Set();
+      const nombresEstudios = [];
+
+      seleccionados.forEach(e => {
+        nombresEstudios.push(e.nombre);
+        if (e.ayunoHoras > maxAyuno) maxAyuno = e.ayunoHoras;
+        if (e.preparacion && e.preparacion !== "Sin preparación específica") {
+          preparacionesUnicas.add(e.preparacion);
+        }
+      });
+
+      let htmlPreparaciones = ``;
+
+      if (alertasIncompatibilidad.length > 0) {
+          htmlPreparaciones += `
+            <div class="flex items-start gap-3 text-rose-800 bg-rose-50 p-4 border border-rose-200 text-sm md:text-base mb-4 alert-print">
+              <i data-lucide="alert-triangle" class="w-6 h-6 flex-shrink-0 mt-0.5 print:hidden text-rose-600"></i>
+              <div>
+                  <strong class="block mb-2 text-rose-900 text-base">¡Atención! Incompatibilidad detectada:</strong>
+                  <ul class="list-disc pl-5 space-y-2">
+                      ${alertasIncompatibilidad.map(alerta => `<li>${alerta}</li>`).join('')}
+                  </ul>
+              </div>
+            </div>
+          `;
+      }
+
+      htmlPreparaciones += `
+        <div class="bg-white border border-slate-200 p-5 mb-4 prep-card">
+          <div class="mb-5 pb-4 border-b border-slate-100">
+            <h3 class="text-slate-800 font-semibold text-lg flex items-center gap-2 mb-3">
+               <i data-lucide="list-checks" class="w-5 h-5 text-slate-400 print:hidden"></i>
+               Estudios a realizar:
+            </h3>
+            <ul class="list-disc pl-5 text-slate-600 text-sm md:text-base space-y-1">
+              ${nombresEstudios.map(nombre => `<li><strong>${nombre}</strong></li>`).join('')}
+            </ul>
+          </div>
+      `;
+
+      if (maxAyuno > 0) {
+        htmlPreparaciones += `
+          <div class="flex items-center gap-3 text-amber-800 bg-amber-50 px-4 py-3 border border-amber-200 text-sm md:text-base mb-5">
+            <i data-lucide="clock" class="w-5 h-5 flex-shrink-0 print:hidden text-amber-600"></i>
+            <span><strong>Ayuno Mínimo Requerido:</strong> Se requiere un ayuno de <strong>${maxAyuno} horas</strong> antes de la extracción.</span>
+          </div>
+        `;
+      }
+
+      htmlPreparaciones += `
+          <div>
+            <h4 class="text-slate-800 font-semibold text-md mb-3 flex items-center gap-2">
+              <i data-lucide="info" class="w-5 h-5 text-slate-400 print:hidden"></i>
+              Preparaciones adicionales necesarias:
+            </h4>
+            <div class="text-slate-600 text-sm md:text-base leading-relaxed">
+      `;
+
+      if (preparacionesUnicas.size === 0) {
+         htmlPreparaciones += `<p class="italic text-slate-400">No se requiere ninguna preparación específica para estos estudios.</p>`;
+      } else {
+         htmlPreparaciones += `<ul class="list-disc pl-5 space-y-3">`;
+         Array.from(preparacionesUnicas).forEach(prep => {
+            htmlPreparaciones += `<li>${prep}</li>`;
+         });
+         htmlPreparaciones += `</ul>`;
+      }
+
+      htmlPreparaciones += `
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-6 p-4 bg-slate-100 border-l-4 border-[#70006a] disclaimer-print">
+            <p class="text-slate-700 print:text-black text-sm md:text-base flex items-start gap-3">
+                <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0 mt-0.5 text-[#70006a] print:hidden"></i>
+                <span><strong>Aviso importante:</strong> Lea atentamente estas instrucciones, su cumplimiento es imprescindible para garantizar la calidad de sus resultados.</span>
+            </p>
+        </div>
+      `;
+
+      preparacionesContenedor.innerHTML = htmlPreparaciones;
+      lucide.createIcons();
+    }
+
+    function enviarWhatsApp() {
+      if (seleccionados.length === 0) return;
+
+      let alertasIncompatibilidad = [];
+      reglasIncompatibilidades.forEach(regla => {
+          const hayGrupoA = regla.grupoA.some(cod => seleccionados.some(s => s.codigo === cod));
+          const hayGrupoB = regla.grupoB.some(cod => seleccionados.some(s => s.codigo === cod));
+          if (hayGrupoA && hayGrupoB) alertasIncompatibilidad.push(regla.mensaje);
+      });
+
+      let maxAyuno = 0;
+      const preparacionesUnicas = new Set();
+      const nombresEstudios = [];
+
+      seleccionados.forEach(e => {
+        nombresEstudios.push(e.nombre);
+        if (e.ayunoHoras > maxAyuno) maxAyuno = e.ayunoHoras;
+        if (e.preparacion && e.preparacion !== "Sin preparación específica") {
+          preparacionesUnicas.add(e.preparacion);
+        }
+      });
+
+      let mensaje = "*INDICACIONES DE PREPARACIÓN MÉDICA*\n\n";
+
+      if (alertasIncompatibilidad.length > 0) {
+        mensaje += "🚫 *ATENCIÓN - ESTUDIOS INCOMPATIBLES:*\n";
+        alertasIncompatibilidad.forEach(alerta => {
+            mensaje += `• ${alerta}\n`;
+        });
+        mensaje += "\n";
+      }
+      
+      mensaje += "*Estudios solicitados:*\n";
+      nombresEstudios.forEach(nombre => {
+        mensaje += `• ${nombre}\n`;
+      });
+
+      mensaje += "\n*Resumen de indicaciones:*\n";
+      if (maxAyuno > 0) mensaje += `⏰ *Ayuno mínimo:* ${maxAyuno} horas.\n\n`;
+
+      if (preparacionesUnicas.size > 0) {
+        mensaje += "*Preparaciones adicionales:*\n";
+        Array.from(preparacionesUnicas).forEach(prep => {
+            mensaje += `👉 ${prep}\n\n`;
+        });
+      } else {
+        mensaje += "_No se requiere preparación específica._\n\n";
+      }
+
+      mensaje += "⚠️ *Aviso importante:* _Su cumplimiento es imprescindible para garantizar la calidad de sus resultados._\n";
+
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
