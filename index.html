@@ -8,6 +8,8 @@
   <!-- Tailwind CSS y Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Librería para generar el PDF de descarga directa -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -17,39 +19,24 @@
     .sidebar-scroll::-webkit-scrollbar { width: 6px; }
     .sidebar-scroll::-webkit-scrollbar-thumb { background-color: #e2e8f0; border-radius: 10px; }
     
-    /* Encabezado exclusivo para PDF oculto en web */
-    .print-header { display: none; }
-    
-    /* Estilos de impresión exclusivos para la calculadora */
+    /* Estilos para impresión nativa (por si el usuario presiona Ctrl+P) */
     @media print {
-      /* Ocultar elementos innecesarios */
       .no-print, aside, .top-content, .md\:col-span-7, .print\:hidden { display: none !important; }
       
-      /* Ajustar contenedores para evitar cortes y permitir múltiples páginas */
       body, main, .md\:col-span-5 > div, .flex-grow { 
         overflow: visible !important; 
         height: auto !important; 
         background: white !important; 
       }
-      main { width: 100% !important; margin: 0 !important; padding: 0 !important; }
-      .md\:col-span-5 { width: 100% !important; display: block !important; border: none !important; }
       
-      /* Mostrar encabezado solicitado con fondo morado */
-      .print-header { 
-        display: block !important; 
-        background-color: #70006a !important; 
-        color: white !important; 
-        padding: 16px !important; 
-        font-size: 1.25rem !important; 
-        font-weight: 700 !important; 
-        border-radius: 0.5rem !important; 
-        margin-bottom: 20px !important; 
-        text-align: center !important; 
-        -webkit-print-color-adjust: exact; 
-        print-color-adjust: exact; 
+      .app-container, .grid, .md\:grid-cols-12 {
+          display: block !important;
+          width: 100% !important;
       }
       
-      /* Mantener estilo de recuadros y fondo blanco */
+      main { width: 100% !important; margin: 0 !important; padding: 0 !important; display: block !important; }
+      .md\:col-span-5 { width: 100% !important; display: block !important; border: none !important; }
+      
       .prep-card { 
         border: 1px solid #e2e8f0 !important; 
         margin-bottom: 15pt !important; 
@@ -87,13 +74,11 @@
   <!-- ========================================== -->
   <aside class="w-[280px] bg-white h-full flex flex-col shrink-0 border-r border-slate-200 shadow-[2px_0_15px_rgba(0,0,0,0.03)] z-10 no-print">
     
-    <!-- Logo Falso (Visual) -->
+    <!-- Logo Falso (Visual) (Corrección de cierres HTML) -->
     <div class="pt-8 pb-6 px-8 flex justify-center items-center">
-            <div class="sidebar">
-                <div class="logo">
-                    <a href="https://www.nav.com.ar/">
-                        <img src="dm-nav.svg" style="width: 220px;">
-                    </a>
+        <a href="https://www.nav.com.ar/">
+            <img src="dm-nav.svg" style="width: 220px;" alt="Logo">
+        </a>
     </div>
 
     <!-- Usuario -->
@@ -152,10 +137,13 @@
 
             <div class="mb-10 pl-11">
                 <h2 class="text-[22px] font-bold text-blue-500 mb-6 tracking-wide">Web Check In registrado</h2>
-                <div class="space-y-4 text-slate-500 font-light text-[15px] leading-relaxed max-w-3xl">
+                <!-- Corrección de cierres HTML en el texto -->
+                <div class="space-y-4 text-slate-500 font-light text-[15px] leading-relaxed max-w-3xl mb-8">
                     <p>¡Gracias por usar Web Check In! Sabemos que tu tiempo vale.</p>
                     <p>Tu Web Check in fue aprobado. Podés acercarte sin turno y ser atendido con prioridad en nuestro laboratorio.</p>
                     <p>Accedé a los siguientes links para conocer las sedes habilitadas para tu cobertura y horarios 👉 <a href="#" class="text-blue-400 hover:underline">https://www.diagnosticomaipu.com/sedes</a></p>
+                </div>
+                
                 <h2 class="text-[22px] font-bold text-slate-500 mb-6 tracking-wide">Preparaciones</h2>
                 <div class="space-y-1 text-slate-500 font-light text-[15px] leading-relaxed max-w-3xl">
                   <p>Buscá y verificá las indicaciones y preparaciones para tus estudios:</p>
@@ -167,7 +155,7 @@
         <!-- APP DE PREPARACIONES (FUNCIONAL)           -->
         <!-- ========================================== -->
         
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 app-container">
                     <!-- Columna Izquierda Calculadora -->
                     <section class="md:col-span-7 flex flex-col gap-4 print:hidden">
                         <div class="bg-white p-4 border border-slate-200 flex flex-col gap-3">
@@ -206,12 +194,8 @@
                             <span class="text-xs text-slate-400 italic">Ningún estudio seleccionado</span>
                             </div>
 
-                            <!-- Contenedor Principal (Visible en PDF) -->
+                            <!-- Contenedor Principal (Visible) -->
                             <div class="flex-grow p-4 overflow-y-auto flex flex-col print:overflow-visible print:p-0">
-                            
-                            <div class="print-header">
-                              Laboratorio Maipú - Indicaciones para análisis
-                            </div>
                             
                             <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-1.5 print:hidden">
                                 <i data-lucide="info" class="w-4 h-4 text-[#70006a]"></i> Resumen de Indicaciones
@@ -226,10 +210,11 @@
                             </div>
 
                             <div class="p-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-2 print:hidden">
-                            <button onclick="window.print()" class="flex-1 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-800 text-white font-medium py-2.5 px-3 transition text-sm">
-                                <i data-lucide="printer" class="w-4 h-4"></i> Guardar PDF
+                            <!-- BOTÓN DE DESCARGA PDF ACTUALIZADO -->
+                            <button onclick="descargarPDF()" id="btnDescargarPdf" disabled class="flex-1 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium py-2.5 px-3 transition text-sm cursor-pointer">
+                                <i data-lucide="download" class="w-4 h-4"></i> Guardar PDF
                             </button>
-                            <button onclick="enviarWhatsApp()" id="btnWhatsApp" disabled class="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium py-2.5 px-3 transition text-sm">
+                            <button onclick="enviarWhatsApp()" id="btnWhatsApp" disabled class="flex-1 flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium py-2.5 px-3 transition text-sm cursor-pointer">
                                 <i data-lucide="message-circle" class="w-5 h-5"></i> Whatsapp
                             </button>
                             </div>
@@ -387,7 +372,11 @@
       document.getElementById("contadorSeleccionados").textContent = seleccionados.length;
       const tagsContainer = document.getElementById("tagsSeleccionados");
       const btnWhatsApp = document.getElementById("btnWhatsApp");
-      btnWhatsApp.disabled = seleccionados.length === 0;
+      const btnPdf = document.getElementById("btnDescargarPdf");
+      
+      const haySeleccion = seleccionados.length > 0;
+      btnWhatsApp.disabled = !haySeleccion;
+      if (btnPdf) btnPdf.disabled = !haySeleccion;
 
       if (seleccionados.length === 0) {
         tagsContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Ningún estudio seleccionado</span>`;
@@ -511,6 +500,112 @@
 
       preparacionesContenedor.innerHTML = htmlPreparaciones;
       lucide.createIcons();
+    }
+
+    // --- FUNCIÓN ACTUALIZADA DE PDF CON NUEVO DISEÑO ---
+    function descargarPDF() {
+      if (seleccionados.length === 0) return;
+
+      const contenedorTemporal = document.createElement('div');
+      // Padding lateral y superior para asegurar bordes prolijos
+      contenedorTemporal.style.padding = '20mm'; 
+      contenedorTemporal.style.fontFamily = 'Arial, sans-serif';
+      
+      let html = `
+        <!-- Encabezado Morado -->
+        <div style="background-color: #70006a; color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
+            <h1 style="margin: 0; font-size: 18pt; font-weight: bold;">Laboratorio Maipú - Preparaciones</h1>
+        </div>
+      `;
+
+      // Cuadro Blanco con Listado de Estudios
+      html += `
+        <div style="background-color: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+            <h3 style="font-size: 12pt; margin-top: 0; margin-bottom: 10px; color: #1e293b; font-weight: bold;">Estudios a realizar:</h3>
+            <ul style="margin: 0; padding-left: 20px; font-size: 11pt; color: #334155;">
+      `;
+      seleccionados.forEach(e => {
+        html += `<li style="margin-bottom: 5px;">${e.nombre}</li>`;
+      });
+      html += `</ul></div>`;
+
+      let maxAyuno = 0;
+      let estudiosConPreparacion = [];
+      seleccionados.forEach(e => {
+        if (e.ayunoHoras > maxAyuno) maxAyuno = e.ayunoHoras;
+        if (e.preparacion && e.preparacion.trim() !== "" && e.preparacion !== "Sin preparación específica") {
+          estudiosConPreparacion.push(e);
+        }
+      });
+
+      // Cuadro Amarillo de Ayuno
+      if (maxAyuno > 0) {
+        html += `
+          <div style="background-color: #fffbeb; border: 1px solid #fde68a; color: #92400e; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 11pt;">
+              <strong>Ayuno Mínimo Requerido:</strong> Se requiere un ayuno de ${maxAyuno} horas antes de la extracción.
+          </div>
+        `;
+      }
+
+      // Detalle de Indicaciones Específicas
+      html += `<h3 style="font-size: 12pt; margin-bottom: 10px; color: #1e293b; font-weight: bold;">Preparaciones adicionales necesarias:</h3>`;
+      if (estudiosConPreparacion.length > 0) {
+          html += `<div style="margin-bottom: 20px;">`;
+          estudiosConPreparacion.forEach(estudio => {
+              html += `
+                <div style="margin-bottom: 15px; font-size: 11pt; color: #334155; line-height: 1.5;">
+                    <strong>${estudio.nombre}</strong><br>
+                    ${estudio.preparacion}
+                </div>
+              `;
+          });
+          html += `</div>`;
+      } else {
+          html += `<p style="font-size: 11pt; margin-bottom: 20px; color: #64748b; font-style: italic;">No se requiere ninguna preparación específica para estos estudios.</p>`;
+      }
+
+      // Recuadro Rojo de Incompatibilidades
+      let alertasIncompatibilidad = [];
+      reglasIncompatibilidades.forEach(regla => {
+          const hayGrupoA = regla.grupoA.some(cod => seleccionados.some(s => s.codigo === cod));
+          const hayGrupoB = regla.grupoB.some(cod => seleccionados.some(s => s.codigo === cod));
+          if (hayGrupoA && hayGrupoB) {
+              alertasIncompatibilidad.push(regla.mensaje);
+          }
+      });
+
+      if (alertasIncompatibilidad.length > 0) {
+          html += `
+            <div style="background-color: #fff1f2; border: 1px solid #fecdd3; border-left: 4px solid #e11d48; color: #9f1239; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 11pt;">
+                <strong style="display: block; margin-bottom: 8px;">¡Atención! Incompatibilidad detectada:</strong>
+                <ul style="margin: 0; padding-left: 20px;">
+          `;
+          alertasIncompatibilidad.forEach(alerta => {
+              html += `<li style="margin-bottom: 5px;">${alerta}</li>`;
+          });
+          html += `</ul></div>`;
+      }
+
+      // Disclaimer Azul Claro final
+      html += `
+        <div style="background-color: #f0f9ff; border-left: 4px solid #70006a; padding: 12px 15px; border-radius: 8px; font-size: 11pt; color: #334155; margin-top: 10px;">
+            <strong>Aviso importante:</strong> Lea atentamente estas instrucciones, su cumplimiento es imprescindible para garantizar la calidad de sus resultados.
+        </div>
+      `;
+
+      contenedorTemporal.innerHTML = html;
+
+      // Configuración de html2pdf
+      const opt = {
+        margin:       0,
+        filename:     'Preparaciones_Laboratorio_Maipu.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      // Disparar descarga directa
+      html2pdf().set(opt).from(contenedorTemporal).save();
     }
 
     function enviarWhatsApp() {
